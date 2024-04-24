@@ -339,13 +339,13 @@
     #links ul li {
         display: block;
         margin-left: 1.2em;
-        margin-bottom: 13px;
+        margin-bottom: 12px;
     }
     #links ul li a {
         font-size: 17px;
     }
     #links ul {
-        padding: 0px 0px 13px 0px;
+        padding: 0px 0px 12px 0px;
     }
 
    .seeds{

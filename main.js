@@ -1,40 +1,47 @@
-const pikachu = {
-    name: 'Pikachu',
-    health: 100,
-    attack: function() {
-        return Math.floor(Math.random() * 10) + 5;
-    },
-    specialAttack: function() {
-        return Math.floor(Math.random() * 20) + 10;
-    }
+const Pokemon = function(name) {
+    this.name = name;
+    this.health = 100;
+    
+    this.attack = function(opponent) {
+        const damage = Math.floor(Math.random() * 10) + 5;
+        opponent.health -= damage;
+        if (opponent.health < 0) opponent.health = 0;
+        this.updateHealthBar(opponent);
+        return damage;
+    };
+
+    this.specialAttack = function(opponent) {
+        const damage = Math.floor(Math.random() * 20) + 10;
+        opponent.health -= damage;
+        if (opponent.health < 0) opponent.health = 0;
+        this.updateHealthBar(opponent);
+        return damage;
+    };
+
+    this.updateHealthBar = function(pokemon) {
+        const healthElement = document.getElementById('health' + (pokemon === pikachu ? '1' : '2'));
+        healthElement.style.width = pokemon.health + '%';
+        if (pokemon.health <= 0) {
+            alert(pokemon.name + ' has fainted!');
+        }
+    };
 };
 
-const charmander = {
-    name: 'Charmander',
-    health: 100,
-    attack: function() {
-        return Math.floor(Math.random() * 10) + 5;
-    },
-    specialAttack: function() {
-        return Math.floor(Math.random() * 20) + 10;
-    }
-};
+const pikachu = new Pokemon('Pikachu');
+const charmander = new Pokemon('Charmander');
 
-let isAttacking = false;
-
-function updateHealthBar(pokemon, healthElement) {
-    healthElement.style.width = pokemon.health + '%';
-    if (pokemon.health <= 0) {
-        pokemon.health = 0;
-        alert(pokemon.name + ' has fainted!');
-    }
+function battle(attacker, defender, attackerId, targetId) {
+    if (isAttacking) return;
+    isAttacking = true;
+    showPokeball(attackerId, targetId);
+    attacker.attack(defender);
 }
 
-function resetPokeball() {
-    const pokeball = document.getElementById('pokeball');
-    pokeball.style.visibility = 'hidden';
-    pokeball.style.top = '50%';
-    pokeball.style.left = '50%';
+function specialBattle(attacker, defender, attackerId, targetId) {
+    if (isAttacking) return;
+    isAttacking = true;
+    showPokeball(attackerId, targetId);
+    attacker.specialAttack(defender);
 }
 
 function showPokeball(attackerId, targetId) {
@@ -56,7 +63,7 @@ function showPokeball(attackerId, targetId) {
 
     setTimeout(() => {
         pokeball.style.visibility = 'hidden';
-        showExplosion(targetPos); 
+        showExplosion(targetPos);
         resetPokeball();
         isAttacking = false;
     }, 800);
@@ -73,30 +80,27 @@ function showExplosion(position) {
     }, 300);
 }
 
-function battle(attacker, defender, healthBarDefender, attackerId, targetId) {
-    if (isAttacking) return;
-    isAttacking = true;
-    showPokeball(attackerId, targetId);
-    const damage = attacker.attack();
-    defender.health -= damage;
-    updateHealthBar(defender, healthBarDefender);
+function resetPokeball() {
+    const pokeball = document.getElementById('pokeball');
+    pokeball.style.visibility = 'hidden';
+    pokeball.style.top = '50%';
+    pokeball.style.left = '50%';
 }
 
-const health1 = document.getElementById('health1');
-const health2 = document.getElementById('health2');
+let isAttacking = false;
 
 document.getElementById('attack1').addEventListener('click', function() {
-    battle(pikachu, charmander, health2, 'pokemon1', 'pokemon2');
+    battle(pikachu, charmander, 'pokemon1', 'pokemon2');
 });
 
 document.getElementById('special1').addEventListener('click', function() {
-    battle(pikachu, charmander, health2, 'pokemon1', 'pokemon2');
+    specialBattle(pikachu, charmander, 'pokemon1', 'pokemon2');
 });
 
 document.getElementById('attack2').addEventListener('click', function() {
-    battle(charmander, pikachu, health1, 'pokemon2', 'pokemon1');
+    battle(charmander, pikachu, 'pokemon2', 'pokemon1');
 });
 
 document.getElementById('special2').addEventListener('click', function() {
-    battle(charmander, pikachu, health1, 'pokemon2', 'pokemon1');
+    specialBattle(charmander, pikachu, 'pokemon2', 'pokemon1');
 });

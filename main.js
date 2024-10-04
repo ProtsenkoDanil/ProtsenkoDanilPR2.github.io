@@ -1,37 +1,37 @@
 const Pokemon = function(name) {
     this.name = name;
     this.health = 100;
+};
 
-    this.attack = function(opponent) {
-        const damage = Math.floor(Math.random() * 10) + 5;
-        opponent.health -= damage;
-        if (opponent.health < 0) opponent.health = 0;
-        this.updateHealthBar(opponent);
-        return damage;
-    };
+Pokemon.prototype.attack = function(opponent) {
+    const damage = Math.floor(Math.random() * 10) + 5;
+    opponent.health -= damage;
+    if (opponent.health < 0) opponent.health = 0;
+    this.updateHealthBar(opponent);
+    return damage;
+};
 
-    this.specialAttack = function(opponent) {
-        const damage = Math.floor(Math.random() * 20) + 10;
-        opponent.health -= damage;
-        if (opponent.health < 0) opponent.health = 0;
-        this.updateHealthBar(opponent);
-        return damage;
-    };
+Pokemon.prototype.specialAttack = function(opponent) {
+    const damage = Math.floor(Math.random() * 20) + 10;
+    opponent.health -= damage;
+    if (opponent.health < 0) opponent.health = 0;
+    this.updateHealthBar(opponent);
+    return damage;
+};
 
-    this.updateHealthBar = function(opponent) {
-        const healthElement = document.getElementById(opponent === character ? 'health1' : 'health2');
-        healthElement.style.width = opponent.health + '%';
-        if (opponent.health <= 0) {
-            alert(opponent.name + ' has fainted!');
-        }
-    };
+Pokemon.prototype.updateHealthBar = function(opponent) {
+    const healthElement = document.getElementById(opponent === character ? 'health1' : 'health2');
+    healthElement.style.width = opponent.health + '%';
+    if (opponent.health <= 0) {
+        alert(opponent.name + ' has fainted!');
+    }
 };
 
 const character = new Pokemon('Pikachu');
 const enemy = new Pokemon('Charmander');
 
 function battle(attacker, defender, attackerId, targetId) {
-    if (isAttacking) return; // Запобігаємо дублюванню атак під час анімації
+    if (isAttacking) return;
     isAttacking = true;
     showPokeball(attackerId, targetId);
     attacker.attack(defender);
@@ -92,6 +92,7 @@ let isAttacking = false;
 document.getElementById('attack1').addEventListener('click', function() {
     battle(character, enemy, 'pokemon1', 'pokemon2');
 });
+
 
 document.getElementById('special1').addEventListener('click', function() {
     specialBattle(character, enemy, 'pokemon1', 'pokemon2');

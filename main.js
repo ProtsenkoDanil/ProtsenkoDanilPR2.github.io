@@ -1,7 +1,7 @@
 const Pokemon = function(name) {
     this.name = name;
     this.health = 100;
-    
+
     this.attack = function(opponent) {
         const damage = Math.floor(Math.random() * 10) + 5;
         opponent.health -= damage;
@@ -18,20 +18,20 @@ const Pokemon = function(name) {
         return damage;
     };
 
-    this.updateHealthBar = function(pokemon) {
-        const healthElement = document.getElementById('health' + (pokemon === pikachu ? '1' : '2'));
-        healthElement.style.width = pokemon.health + '%';
-        if (pokemon.health <= 0) {
-            alert(pokemon.name + ' has fainted!');
+    this.updateHealthBar = function(opponent) {
+        const healthElement = document.getElementById(opponent === character ? 'health1' : 'health2');
+        healthElement.style.width = opponent.health + '%';
+        if (opponent.health <= 0) {
+            alert(opponent.name + ' has fainted!');
         }
     };
 };
 
-const pikachu = new Pokemon('Pikachu');
-const charmander = new Pokemon('Charmander');
+const character = new Pokemon('Pikachu');
+const enemy = new Pokemon('Charmander');
 
 function battle(attacker, defender, attackerId, targetId) {
-    if (isAttacking) return;
+    if (isAttacking) return; // Запобігаємо дублюванню атак під час анімації
     isAttacking = true;
     showPokeball(attackerId, targetId);
     attacker.attack(defender);
@@ -90,17 +90,17 @@ function resetPokeball() {
 let isAttacking = false;
 
 document.getElementById('attack1').addEventListener('click', function() {
-    battle(pikachu, charmander, 'pokemon1', 'pokemon2');
+    battle(character, enemy, 'pokemon1', 'pokemon2');
 });
 
 document.getElementById('special1').addEventListener('click', function() {
-    specialBattle(pikachu, charmander, 'pokemon1', 'pokemon2');
+    specialBattle(character, enemy, 'pokemon1', 'pokemon2');
 });
 
 document.getElementById('attack2').addEventListener('click', function() {
-    battle(charmander, pikachu, 'pokemon2', 'pokemon1');
+    battle(enemy, character, 'pokemon2', 'pokemon1');
 });
 
 document.getElementById('special2').addEventListener('click', function() {
-    specialBattle(charmander, pikachu, 'pokemon2', 'pokemon1');
+    specialBattle(enemy, character, 'pokemon2', 'pokemon1');
 });

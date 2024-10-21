@@ -5,26 +5,28 @@ const Pokemon = function(name) {
 
 Pokemon.prototype.attack = function(opponent) {
     const damage = Math.floor(Math.random() * 10) + 5;
-    opponent.health -= damage;
-    if (opponent.health < 0) opponent.health = 0;
-    this.updateHealthBar(opponent);
+    opponent.takeDamage(damage);
     return damage;
 };
 
 Pokemon.prototype.specialAttack = function(opponent) {
     const damage = Math.floor(Math.random() * 20) + 10;
-    opponent.health -= damage;
-    if (opponent.health < 0) opponent.health = 0;
-    this.updateHealthBar(opponent);
+    opponent.takeDamage(damage);
     return damage;
 };
 
-Pokemon.prototype.updateHealthBar = function(opponent) {
-    const healthElement = document.getElementById(opponent === character ? 'health1' : 'health2');
-    healthElement.style.width = opponent.health + '%';
-    if (opponent.health <= 0) {
-        alert(opponent.name + ' has fainted!');
+Pokemon.prototype.takeDamage = function(damage) {
+    this.health -= damage;
+    if (this.health < 0) this.health = 0;
+    this.updateHealthBar();
+    if (this.health <= 0) {
+        alert(this.name + ' has fainted!');
     }
+};
+
+Pokemon.prototype.updateHealthBar = function() {
+    const healthElement = document.getElementById(this.name === 'Pikachu' ? 'health1' : 'health2');
+    healthElement.style.width = this.health + '%';
 };
 
 const character = new Pokemon('Pikachu');
@@ -92,7 +94,6 @@ let isAttacking = false;
 document.getElementById('attack1').addEventListener('click', function() {
     battle(character, enemy, 'pokemon1', 'pokemon2');
 });
-
 
 document.getElementById('special1').addEventListener('click', function() {
     specialBattle(character, enemy, 'pokemon1', 'pokemon2');
